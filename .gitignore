@@ -1,0 +1,12 @@
+# Secrets — never commit
+.env
+Clickup API.rtf
+
+# Temporary / generated data
+.tmp/
+
+# OS
+.DS_Store
+
+# Claude internals
+.claude/
