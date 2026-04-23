@@ -496,7 +496,7 @@ def build_html(overdue_by_member, this_week_by_member, week_start, week_end,
 <body>
 
   <header class="site-header">
-    <div class="header-eyebrow">The Life Church · Creative Memphis</div>
+    <div class="header-eyebrow">The Life Church · Design Memphis</div>
     <h1 class="header-title">Weekly Task Report</h1>
     <div class="header-week">Week of {week_label}</div>
     <div class="header-stats">
@@ -520,7 +520,7 @@ def build_html(overdue_by_member, this_week_by_member, week_start, week_end,
   </main>
 
   <footer class="site-footer">
-    <p>The Life Church Creative Memphis &middot; Weekly Task Report</p>
+    <p>The Life Church Design Memphis &middot; Weekly Task Report</p>
     <p>Generated {gen_label} &middot; Read-only &mdash; no ClickUp data was modified.</p>
   </footer>
 
