@@ -16,6 +16,22 @@ OUTPUT_FILE = ROOT / "weekly_report.html"
 
 TEAM_FIRST_NAMES = ["lizzie", "camilo", "daniel", "caleb", "chris", "carlos", "olivia", "bella"]
 
+# Specific assignees to exclude even if they match a TEAM_FIRST_NAMES substring.
+# Compared case-insensitively against the ClickUp username.
+EXCLUDED_USERNAMES = {"caleb trinidad"}
+
+# When a task is shared with these members AND another team member, hide it from
+# the listed member's column to avoid duplicate cards. Tasks where they are the
+# sole team-member assignee still appear under them.
+DEDUP_WHEN_SHARED = {"olivia"}
+
+PRIORITY_COLORS = {
+    "urgent": "#f50000",
+    "high":   "#f8ae00",
+    "normal": "#6fddff",
+    "low":    "#9ca3af",
+}
+
 # Subtask names matching these patterns are excluded (meeting overhead tasks)
 MEETING_PATTERNS = [
     "weekly meeting", "team meeting", "monthly meeting", "staff meeting",
@@ -90,6 +106,30 @@ def status_badge(task):
     return f'<span class="badge" style="color:{color};background:{bg};">{esc(label)}</span>'
 
 
+def priority_badge(task):
+    p = task.get("priority")
+    if not p:
+        return ""
+    label = (p.get("priority") or "").strip().lower()
+    if not label:
+        return ""
+    color = PRIORITY_COLORS.get(label, p.get("color") or "#6b7280")
+    return (f'<span class="priority" style="color:{color};" title="{esc(label.title())} priority">'
+            f'<span class="priority-flag">⚑</span>{esc(label.title())}</span>')
+
+
+def _team_username(task):
+    """Return the lowercase first-name token for the first matching assignee, or None."""
+    for a in (task.get("assignees") or []):
+        n = (a.get("username") or "").lower()
+        if n in EXCLUDED_USERNAMES:
+            continue
+        for first in TEAM_FIRST_NAMES:
+            if first in n:
+                return first
+    return None
+
+
 # ── HTML builders ─────────────────────────────────────────────────────────────
 
 def task_row_html(task, subtasks, week_start_date, is_sub=False):
@@ -122,6 +162,7 @@ def task_row_html(task, subtasks, week_start_date, is_sub=False):
         <div class="task-meta">
           {context_html}
           {status_badge(task)}
+          {priority_badge(task)}
         </div>
       </div>
       <div class="task-due" style="color:{due_color};">{due_str}</div>
@@ -441,6 +482,20 @@ def build_html(overdue_by_member, this_week_by_member, week_start, week_end,
       border-radius: 9999px;
       white-space: nowrap;
     }}
+    .priority {{
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+    }}
+    .priority-flag {{
+      font-size: 12px;
+      line-height: 1;
+    }}
     .task-due {{
       font-size: 12px;
       font-weight: 700;
@@ -552,6 +607,8 @@ def main():
     def is_team_task(task):
         for a in (task.get("assignees") or []):
             n = (a.get("username") or a.get("email") or "").lower()
+            if n in EXCLUDED_USERNAMES:
+                continue
             if any(first in n for first in TEAM_FIRST_NAMES):
                 return True
         return False
@@ -596,14 +653,28 @@ def main():
         elif week_start <= due_date <= week_end:
             this_week_tasks.append(t)
 
-    # Group by assignee (task appears under each assigned team member)
+    # Group by assignee (task appears under each assigned team member).
+    # Members in DEDUP_WHEN_SHARED are dropped from a task if any other team
+    # member is also assigned, to avoid duplicate cards.
     def group_by_member(task_list):
         groups = {}
         for t in task_list:
+            team_assignees = []
             for a in (t.get("assignees") or []):
                 username = (a.get("username") or a.get("email") or "").strip()
-                if username and any(first in username.lower() for first in TEAM_FIRST_NAMES):
-                    groups.setdefault(username, []).append(t)
+                if not username or username.lower() in EXCLUDED_USERNAMES:
+                    continue
+                if any(first in username.lower() for first in TEAM_FIRST_NAMES):
+                    team_assignees.append(username)
+
+            if len(team_assignees) > 1:
+                team_assignees = [
+                    u for u in team_assignees
+                    if not any(first in u.lower() for first in DEDUP_WHEN_SHARED)
+                ]
+
+            for username in team_assignees:
+                groups.setdefault(username, []).append(t)
         return dict(sorted(groups.items()))
 
     overdue_by_member   = group_by_member(overdue_tasks)
