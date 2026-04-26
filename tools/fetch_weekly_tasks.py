@@ -8,6 +8,7 @@ Saves to .tmp/weekly_tasks.json.
 Read-only: GET requests only.
 """
 
+import argparse
 import json
 import sys
 import time
@@ -82,6 +83,11 @@ def get_team_tasks(team_id, due_lt_ms, due_gt_ms, page=0):
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--next-week", action="store_true",
+                        help="Fetch for next week instead of the current week")
+    args = parser.parse_args()
+
     out_dir = ROOT / ".tmp"
     out_dir.mkdir(exist_ok=True)
 
@@ -97,8 +103,9 @@ def main():
 
     # ── Calculate date range ──────────────────────────────────────────────────
     today = datetime.now().date()
-    monday = today - timedelta(days=today.weekday())   # this week's Monday
-    sunday = monday + timedelta(days=6)                # this week's Sunday
+    week_offset = timedelta(weeks=1) if args.next_week else timedelta(0)
+    monday = today - timedelta(days=today.weekday()) + week_offset
+    sunday = monday + timedelta(days=6)
 
     end_of_week = datetime(sunday.year, sunday.month, sunday.day, 23, 59, 59)
     six_months_ago = datetime.now() - timedelta(days=180)
