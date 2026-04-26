@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Leaders Report — The Life Church Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --text:       #1a1a1a;
+      --text-light: #6b7280;
+      --border:     #e5e7eb;
+      --surface:    #f9fafb;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #eef0f3;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ── HEADER ────────────────────────────────────────────── */
+    .site-header {
+      background: #1a1a1a;
+      padding: 48px 48px 44px;
+      text-align: center;
+    }
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 10px;
+    }
+    .header-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .header-week {
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 28px;
+    }
+    .header-stats {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+    .stat-num {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-top: 4px;
+    }
+
+    /* ── MAIN ──────────────────────────────────────────────── */
+    .main {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 44px 24px 60px;
+    }
+
+    /* ── SECTIONS ──────────────────────────────────────────── */
+    .report-section { margin-bottom: 52px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .section-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+    }
+    .section-meta {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 3px;
+    }
+
+    /* ── MEMBER GRID ───────────────────────────────────────── */
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── MEMBER CARD ───────────────────────────────────────── */
+    .member-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .member-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+    .member-name {
+      font-size: 14px;
+      font-weight: 700;
+      flex: 1;
+    }
+    .member-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-light);
+      background: #e5e7eb;
+      padding: 2px 9px;
+      border-radius: 9999px;
+    }
+
+    /* ── TASK ROWS ─────────────────────────────────────────── */
+    .task-list { padding: 4px 0; }
+
+    .task-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 16px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .task-row:last-child { border-bottom: none; }
+
+    .task-row.subtask {
+      padding-left: 34px;
+      background: #fafafa;
+    }
+
+    .task-main { flex: 1; min-width: 0; }
+
+    .task-name a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.4;
+      display: block;
+    }
+    .task-name a:hover { color: #0693e3; text-decoration: underline; }
+
+    .task-row.subtask .task-name a {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    .task-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+    .task-context {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .priority {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+    }
+    .priority-flag {
+      font-size: 12px;
+      line-height: 1;
+    }
+    .assignee-chip {
+      font-size: 10px;
+      font-weight: 600;
+      color: #4b5563;
+      background: #eef2f7;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .group-card .member-header {
+      background: #f1ecff;
+    }
+    .group-card .avatar {
+      background: #5b3ec9;
+    }
+    .task-due {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    /* ── CARD GROUP LABEL ──────────────────────────────────── */
+    .card-group-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      padding: 6px 16px 4px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .card-group-label:first-child {
+      border-top: none;
+    }
+
+    /* ── EMPTY STATE ───────────────────────────────────────── */
+    .empty-state {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      font-size: 14px;
+      color: var(--text-light);
+      font-style: italic;
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    .site-footer {
+      background: #1a1a1a;
+      color: rgba(255,255,255,0.3);
+      padding: 24px 48px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 2;
+    }
+
+    @media (max-width: 640px) {
+      .site-header { padding: 32px 20px; }
+      .main { padding: 28px 16px 48px; }
+      .member-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-eyebrow">The Life Church · Design Memphis · Leaders</div>
+    <h1 class="header-title">Weekly Leaders Report</h1>
+    <div class="header-week">Week of April 27 – May 3, 2026</div>
+    <div class="header-stats">
+      <div class="stat">
+        <div class="stat-num" style="color:#ff7b7b;">38</div>
+        <div class="stat-label">Overdue</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:#60b4ff;">31</div>
+        <div class="stat-label">Due This Week</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:#fff;">69</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    
+  <section class="report-section">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <div>
+        <h2 class="section-title">April 27 – May 3, 2026</h2>
+        <div class="section-meta">69 tasks &middot; 10 cards</div>
+      </div>
+    </div>
+    <div class="member-grid">
+      
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">CC</div>
+      <div class="member-name">Caleb Chunn</div>
+      <div class="member-count">9</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9efr2g" target="_blank" rel="noopener">Podcast Video Consolidation for Jackson</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 16</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d28rg" target="_blank" rel="noopener">Nashville Updated Welcome Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 16</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d14ng" target="_blank" rel="noopener">Instructional Capture Training Videos</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 16</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b96cr3z" target="_blank" rel="noopener">Refresh Service Opener - Editing</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9k4cnn" target="_blank" rel="noopener">Sunday Capture - Caleb</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Planned Content › Weekend Responsibilities </span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 26</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9grm56" target="_blank" rel="noopener">Update the Pre-Service Scroll</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f8ae00;" title="High priority"><span class="priority-flag">⚑</span>High</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9jzwd0" target="_blank" rel="noopener">Welcome Video May 10</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9jznx5" target="_blank" rel="noopener">Welcome Video May 2</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d28vq" target="_blank" rel="noopener">Mass Updated Welcome Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 28</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">CE</div>
+      <div class="member-name">Camilo Espinel</div>
+      <div class="member-count">6</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b99aejd" target="_blank" rel="noopener">AC26 speaker line up post</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 13</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9306g1" target="_blank" rel="noopener">Bumper Stickers - not new content, pull from posters</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f50000;" title="Urgent priority"><span class="priority-flag">⚑</span>Urgent</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9306et" target="_blank" rel="noopener">Keychain - use design from the hat</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f50000;" title="Urgent priority"><span class="priority-flag">⚑</span>Urgent</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9306cc" target="_blank" rel="noopener">Hat 1 Designs - Silly</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f50000;" title="Urgent priority"><span class="priority-flag">⚑</span>Urgent</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b930560" target="_blank" rel="noopener">Shirt #3 Cool Viby Shirt </a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f50000;" title="Urgent priority"><span class="priority-flag">⚑</span>Urgent</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b93067f" target="_blank" rel="noopener">Raw Edge Zip Up</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">May 3</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">CH</div>
+      <div class="member-name">Carlos Hernández</div>
+      <div class="member-count">7</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b6e67b4" target="_blank" rel="noopener">Exalted YouTube Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#9b51e0;background:#f3ebfd;">Waiting</span>
+          <span class="priority" style="color:#f8ae00;" title="High priority"><span class="priority-flag">⚑</span>High</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Feb 19</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d28wr" target="_blank" rel="noopener">Italy Updated Welcome Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 16</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9k4cjg" target="_blank" rel="noopener">Sunday Capture - Carlos</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Planned Content › Weekend Responsibilities </span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 26</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d6gu1" target="_blank" rel="noopener">Early Mission Team Photo - HSL Mexico - David Boyd</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Capture</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 26</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d291w" target="_blank" rel="noopener">DC Updated Welcome Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d28zb" target="_blank" rel="noopener">South Africa Updated Welcome Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 29</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9k2c58" target="_blank" rel="noopener">Full Screen for Under The Sun</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › 2026 Series</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 30</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">CS</div>
+      <div class="member-name">Chris Steen</div>
+      <div class="member-count">4</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8vg343" target="_blank" rel="noopener">Axis Conf Social Posts</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Mar 26</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d2vvr" target="_blank" rel="noopener">Tribal War Core Design</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#00a550;background:#e6f9ef;">Approved</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 20</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d6gu1" target="_blank" rel="noopener">Early Mission Team Photo - HSL Mexico - David Boyd</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Capture</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 26</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9k4m8w" target="_blank" rel="noopener">Sunday Capture - Chris</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Planned Content › Weekend Responsibilities </span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">May 3</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">DG</div>
+      <div class="member-name">Daniel Gamboa</div>
+      <div class="member-count">7</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8mqpb1" target="_blank" rel="noopener">Serve Day - Recurring Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Mar 30</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d7gqn" target="_blank" rel="noopener">Animate Mother's Day for Gameshow</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 20</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87f39q" target="_blank" rel="noopener">Speakers Bumpers - Danny</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9k4jmj" target="_blank" rel="noopener">Sunday Capture - Danny</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Planned Content › Weekend Responsibilities </span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 26</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87f3q7" target="_blank" rel="noopener">Monday MC Design</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f8ae00;" title="High priority"><span class="priority-flag">⚑</span>High</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9ecejr" target="_blank" rel="noopener">MC Speaker Lowerthird Animation</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 28</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b96crqj" target="_blank" rel="noopener">Refresh Service Opener - Any Motion Graphics</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 30</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">LM</div>
+      <div class="member-name">Lizzie Miller</div>
+      <div class="member-count">23</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87f1h7" target="_blank" rel="noopener">Banner Designs For Wednesday</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Mar 16</div>
+    </div>
+    
+    <div class="task-row subtask">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d2rz3" target="_blank" rel="noopener">Make Graphic Simple to Update</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#9ca3af;">Apr 14</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8u5d67" target="_blank" rel="noopener">Do It for Them Campaign Branding</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Next Gen Building Project</span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Mar 24</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b84tgyu" target="_blank" rel="noopener">Type Face Options for Zoe Conference</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Zoe Conference </span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          <span class="priority" style="color:#f8ae00;" title="High priority"><span class="priority-flag">⚑</span>High</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 13</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9cn0qr" target="_blank" rel="noopener">Design</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 16</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9cmzxq" target="_blank" rel="noopener">Update FTG Card with new look</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Planned Content › Content Refresh</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 20</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9gnqx5" target="_blank" rel="noopener">Full Graphic Options to Review 4/28</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Zoe Conference </span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9af82q" target="_blank" rel="noopener">Kids Life Sticker for Mother's Day</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Print</span>
+          
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b79r1r3" target="_blank" rel="noopener">Design Work for Under New Management Series</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › 2026 Series</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9cn0qw" target="_blank" rel="noopener">Order</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 23</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9k4dv1" target="_blank" rel="noopener">Sunday Social Graphics - Lizzie</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Planned Content › Weekend Responsibilities </span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 26</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9ed1z2" target="_blank" rel="noopener">Edit to Full Mother's Day Walkin</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9bmbzh" target="_blank" rel="noopener">Shirt #5 Axis Worship</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9305gh" target="_blank" rel="noopener">Crewneck</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b93057y" target="_blank" rel="noopener">Shirt Design Conf Tee</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9304yb" target="_blank" rel="noopener">Shirt Design #1 girly tee</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87jkj0" target="_blank" rel="noopener">Wristband</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b858b72" target="_blank" rel="noopener">30 Year Logo Mark - Forward Sytle</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › 30th Anniversary Vision Season</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87jkxz" target="_blank" rel="noopener">5in5 Screen Design </a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 28</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87jkr8" target="_blank" rel="noopener">Serve Day Screen Design</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 28</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d7ew3" target="_blank" rel="noopener">Press Cafe Axis One Night </a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Print</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 30</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9bp69a" target="_blank" rel="noopener">Staff Kids Tee</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">May 3</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9bp4uy" target="_blank" rel="noopener">Youth Pastor Hat</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">May 3</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8e9yg9" target="_blank" rel="noopener">Serve Shirts</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">May 3</div>
+    </div>
+    
+    <div class="task-row subtask">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9emwcg" target="_blank" rel="noopener">Order</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#9ca3af;">May 3</div>
+    </div>
+    
+    <div class="task-row subtask">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9emu07" target="_blank" rel="noopener">Prep for Order</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#9ca3af;">May 3</div>
+    </div>
+    
+    <div class="task-row subtask">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9emtn6" target="_blank" rel="noopener">Approve</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#9ca3af;">Apr 27</div>
+    </div>
+    
+    <div class="task-row subtask">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8gqn4z" target="_blank" rel="noopener">Design</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#9ca3af;">Apr 26</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">OM</div>
+      <div class="member-name">Olivia McCrimon</div>
+      <div class="member-count">3</div>
+    </div>
+    <div class="task-list">
+      
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8q3q2t" target="_blank" rel="noopener">Press Cafe</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Central Finance › Finance Requests</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">To Do</span>
+          <span class="priority" style="color:#6fddff;" title="Normal priority"><span class="priority-flag">⚑</span>Normal</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 1</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8xtetr" target="_blank" rel="noopener">Axis Welcome Video for MA </a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#9b51e0;background:#f3ebfd;">Waiting</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 14</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8mqmpx" target="_blank" rel="noopener">Axis - Recurring Video</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Video Production</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 21</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card">
+    <div class="member-header">
+      <div class="avatar">EF</div>
+      <div class="member-name">Emily Forehand</div>
+      <div class="member-count">3</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9cn0ty" target="_blank" rel="noopener">Review w/ Ps Leslie</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 21</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8fxg3c" target="_blank" rel="noopener">Review Zoe Type Options w/ Ps Leslie</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Zoe Conference </span>
+          
+          <span class="badge" style="color:#0693e3;background:#e8f4fd;">In Progress</span>
+          <span class="priority" style="color:#f8ae00;" title="High priority"><span class="priority-flag">⚑</span>High</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 28</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8fxgd4" target="_blank" rel="noopener">Final Graphic Approved</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Zoe Conference </span>
+          
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f8ae00;" title="High priority"><span class="priority-flag">⚑</span>High</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 30</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card group-card">
+    <div class="member-header">
+      <div class="avatar">DE</div>
+      <div class="member-name">Design Extra &middot; 3 people</div>
+      <div class="member-count">7</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b8vg343" target="_blank" rel="noopener">Axis Conf Social Posts</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          <span class="assignee-chip">Eli Meneses</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Mar 26</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b84ecxv" target="_blank" rel="noopener">Axis Series - No Skips</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Digital</span>
+          <span class="assignee-chip">Dustin Brand</span>
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 15</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b81a2pu" target="_blank" rel="noopener">Install Banner</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Next Gen Building Project</span>
+          <span class="assignee-chip">Ben Forehand</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 20</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9dzb2d" target="_blank" rel="noopener">Assets for One Night</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Digital</span>
+          <span class="assignee-chip">Dustin Brand</span>
+          <span class="badge" style="color:#ff6900;background:#fff3eb;">In Review</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 20</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b824aqx" target="_blank" rel="noopener">May Cal post</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">Requests › Digital</span>
+          <span class="assignee-chip">Dustin Brand</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b79r1km" target="_blank" rel="noopener">Design Work for Ghostwriter Series</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › 2026 Series</span>
+          <span class="assignee-chip">Dustin Brand</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9cn0r6" target="_blank" rel="noopener">Deliver + Install</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          <span class="assignee-chip">Ben Forehand</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 28</div>
+    </div>
+    
+    </div>
+  </div>
+  <div class="member-card group-card">
+    <div class="member-header">
+      <div class="avatar">E</div>
+      <div class="member-name">External &middot; 4 people</div>
+      <div class="member-count">2</div>
+    </div>
+    <div class="task-list">
+      <div class="card-group-label">Overdue</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b9d77jg" target="_blank" rel="noopener">GameShow Segment</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Mother's Day</span>
+          <span class="assignee-chip">Parker VanBlaricom</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          
+        </div>
+      </div>
+      <div class="task-due" style="color:#c62828;">Apr 20</div>
+    </div>
+    <div class="card-group-label">This Week</div>
+    <div class="task-row">
+      <div class="task-main">
+        <div class="task-name">
+          <a href="https://app.clickup.com/t/86b87jqv8" target="_blank" rel="noopener">Milestone: Confirm Nights Setlists</a>
+        </div>
+        <div class="task-meta">
+          <span class="task-context">2026 - Planned Content › Axis Conference 2026</span>
+          <span class="assignee-chip">Zach VanBlaricom</span>
+          <span class="badge" style="color:#6b7280;background:#f3f4f6;">Not Started</span>
+          <span class="priority" style="color:#f50000;" title="Urgent priority"><span class="priority-flag">⚑</span>Urgent</span>
+        </div>
+      </div>
+      <div class="task-due" style="color:#374151;">Apr 27</div>
+    </div>
+    
+    </div>
+  </div>
+    </div>
+  </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>The Life Church Design Memphis &middot; Weekly Leaders Report</p>
+    <p>Generated April 26, 2026 at 10:03 AM &middot; Read-only &mdash; no ClickUp data was modified.</p>
+  </footer>
+
+</body>
+</html>
